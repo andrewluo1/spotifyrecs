@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-spring/web": "^9.7.5",
+    "@spotify/web-api-ts-sdk": "^1.2.0",
     "next": "15.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -20,6 +21,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "request": "^2.88.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
