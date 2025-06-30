@@ -8,12 +8,16 @@ export default function LoginPage() {
       "playlist-modify-public",
       "playlist-modify-private",
       "streaming",
+      "user-read-playback-state",
+      "user-modify-playback-state",
+      "user-library-read",
+      "user-library-modify",
     ].join(" ");
 
     const params = new URLSearchParams({
       client_id: process.env.NEXT_PUBLIC_CLIENT_ID!,
       response_type: "code",
-      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI!, // should be /api/auth/callback
+      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI!, 
       scope: scopes,
       show_dialog: "true",
     });

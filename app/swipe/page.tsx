@@ -1,105 +1,104 @@
 "use client";
+
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import TinderCard from "react-tinder-card";
-import WebPlayback from "../components/WebPlayback";
+import SpotifyPlayer from "../components/SpotifyPlayer";
 
+type Track = {
+  id: string;
+  name: string;
+  artist: string;
+  uri: string;
+  image: string;
+};
 
 export default function SwipePage() {
-  const searchParams = useSearchParams();
-  const token = searchParams?.get("access_token");
-  const [deviceId, setDeviceId] = useState<string | null>(null);
-  const [tracks, setTracks] = useState<any[]>([]);
+  const token = useSearchParams()?.get("access_token")!;
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Load tracks once
+  // fetch real data (or use your demo array)
   useEffect(() => {
-    if (!token) return;
-    console.log("Token in swipe page:", token);
-
-    fetch("https://api.spotify.com/v1/me/top/tracks?limit=20", {
-    headers: { Authorization: `Bearer ${token}` },
-    })
-  .then(res => res.json())
-  .then(data => {
-    console.log("Spotify API response:", data);
-
-    if (data.items) {
-      const formatted = data.items.map((track: any) => ({
-        id: track.id,
-        name: track.name,
-        artist: track.artists[0].name,
-        uri: track.uri,
-        image: track.album.images[0].url,
-      }));
-      setTracks(formatted);
-    } else {
-      console.error("No tracks in response:", data);
-    }
-  });
-
-    fetch("https://api.spotify.com/v1/me/top/tracks?limit=20", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(res => res.json())
-      .then(data => {
-        const formatted = data.items.map((track: any) => ({
-          id: track.id,
-          name: track.name,
-          artist: track.artists[0].name,
-          uri: track.uri,
-          image: track.album.images[0].url,
-        }));
-        setTracks(formatted);
+    const demo = [
+      {
+        id: "1",
+        name: "Billie Jean",
+        artist: "Michael Jackson",
+        uri: "spotify:track:5ChkMS8OtdzJeqyybCc9R5",
+        image: "https://i.scdn.co/image/ab67616d0000b2731d527804823338ead6195ecc",
+      },
+      {
+        id: "2",
+        name: "Blinding Lights",
+        artist: "The Weeknd",
+        uri: "spotify:track:0VjIjW4GlUZAMYd2vXMi3b",
+        image: "https://i.scdn.co/image/ab67616d0000b2733b6ef7f8b0e5d1c5c6a111aa",
+      },
+    ];
+    setTracks(demo);
+  }, []);
+  // on swipe: if right, save track; then always advance
+  const handleSwipe = async (dir: string, track: Track) => {
+    if (dir === "right") {
+      await fetch(`https://api.spotify.com/v1/me/tracks?ids=${track.id}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
       });
-  }, [token]);
-
-  // Swipe handler
-  const handleSwipe = async (dir: string) => {
-    const track = tracks[currentIndex];
-    if (dir === "right" && track && deviceId && token) {
-      await fetch(
-        `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ uris: [track.uri] }),
-        }
-      );
     }
-    // Show next track
-    setCurrentIndex((prev) => prev + 1);
+    setCurrentIndex((i) => i + 1);
   };
 
-  const currentTrack = tracks[currentIndex];
+  const current = tracks[currentIndex];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-      <WebPlayback token={token!} onReady={setDeviceId} />
-
-      {currentTrack ? (
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      {current ? (
         <TinderCard
-          key={currentTrack.id}
-          onSwipe={handleSwipe}
-          preventSwipe={["up", "down"]}
-        >
-          <div className="bg-white text-black p-6 w-[300px] h-[400px] rounded-xl shadow-lg flex flex-col items-center justify-between">
-            <img
-              src={currentTrack.image}
-              alt="Album Art"
-              className="w-full h-48 rounded-lg object-cover"
-            />
+        key={current.id}
+        onSwipe={(dir) => handleSwipe(dir, currentTrack)}
+        preventSwipe={["up", "down"]}
+      >
+        <div className="bg-white w-80 h-[520px] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+          <img
+            src={current.image}
+            alt={current.name}
+            className="w-full h-64 object-cover"
+          />
+          <div className="p-4 flex-1 flex flex-col justify-between">
             <div>
-              <h2 className="text-lg font-bold">{currentTrack.name}</h2>
-              <p className="text-sm">{currentTrack.artist}</p>
+              <h2 className="text-xl font-semibold text-gray-900">
+                {current.name}
+              </h2>
+              <p className="mt-1 text-gray-600">{current.artist}</p>
+            </div>
+            <div className="mt-4">
+              <SpotifyPlayer
+                token={token}
+                uri={current.uri}
+                play
+                showSaveIcon
+                styles={{
+                  activeColor: "#1db954",
+                  bgColor: "#f3f3f3",
+                  color: "#000",
+                  loaderColor: "#1db954",
+                  sliderColor: "#1db954",
+                  trackNameColor: "#000",
+                  trackArtistColor: "#555",
+                  height: 57,
+                  sliderHeight: 2,
+                  borderRadius: 8,
+                }}
+                layout="compact"
+              />
             </div>
           </div>
-        </TinderCard>
+        </div>
+      </TinderCard>
+
       ) : (
-        <p className="text-gray-400 mt-8">No more tracks</p>
+        <p className="text-white">No more tracks</p>
       )}
     </div>
   );
