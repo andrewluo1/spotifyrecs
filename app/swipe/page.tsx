@@ -14,7 +14,8 @@ type Track = {
 };
 
 export default function SwipePage() {
-  const token = useSearchParams().get('access_token') ?? '';
+  const searchParams = useSearchParams();
+  const token = searchParams?.get('access_token') ?? '';
   const [tracks, setTracks] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
