@@ -86,7 +86,7 @@ export default function SwipePage() {
   const current = tracks[currentIndex];
 
   return (
-    <div className="flex justify-center items-center h-screen bg-black">
+    <div className="flex justify-center items-center h-screen bg-green">
       <div className="relative w-80 h-[520px]">
         {current && (
           <TinderCard
@@ -101,10 +101,10 @@ export default function SwipePage() {
               <div className="flex-1 flex flex-col justify-between p-4">
                 <SpotifyPlayer
                   token={token}
-                  uri={current.uri}
+                  uris={current.uri}
                   play
                   showSaveIcon
-                  hideCoverArt={true}
+                  hideCoverArt={false}
                   layout="compact"
                 />
               </div>

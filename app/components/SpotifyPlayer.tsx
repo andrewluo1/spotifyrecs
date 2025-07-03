@@ -1,32 +1,16 @@
-"use client";
+// app/components/SpotifyPlayer.tsx
+'use client';
 
-import SpotifyPlayer from "react-spotify-web-playback";
+import ReactSpotifyWebPlayer from 'react-spotify-web-playback';
+import type { ComponentProps } from 'react';
 
-type Props = {
-  token: string;
-  uri: string;
-};
+// Inherit all props from the underlying player component
+type SpotifyWebPlayerProps = ComponentProps<typeof ReactSpotifyWebPlayer>;
 
-export default function SpotifyPlayback({ token, uri }: Props) {
+export default function SpotifyPlayer(props: SpotifyWebPlayerProps) {
   return (
     <div className="mt-6 w-full max-w-xl">
-      <SpotifyPlayer
-        token={token}
-        uris={[uri]}
-        autoPlay={true}
-        showSaveIcon
-        styles={{
-          activeColor: "#fff",
-          bgColor: "#121212",
-          color: "#fff",
-          loaderColor: "#1db954",
-          sliderColor: "#1db954",
-          trackArtistColor: "#ccc",
-          trackNameColor: "#fff",
-          height: 60,        
-        }}
-        layout="compact"
-      />
+      <ReactSpotifyWebPlayer {...props} />
     </div>
   );
 }
