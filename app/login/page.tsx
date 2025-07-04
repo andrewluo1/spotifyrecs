@@ -26,7 +26,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div
+      className="
+        flex 
+        flex-col 
+        items-center 
+        justify-center 
+        min-h-screen 
+        bg-cover 
+        bg-center 
+        bg-[url('/bg.png')]
+        text-white
+        p-6
+      "
+    >
       <button onClick={handleLogin} className="bg-green-600 text-white px-6 py-3 rounded-lg">
         Log in with Spotify
       </button>
