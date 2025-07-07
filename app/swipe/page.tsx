@@ -25,6 +25,7 @@ export default function Page() {
     >
       <h1 className="text-4xl font-bold mb-6 drop-shadow-lg">
         Discover Your Next Favorite Tracks
+        
       </h1>
 
       <Suspense fallback={<p className="text-xl">Loading swipe UI…</p>}>
