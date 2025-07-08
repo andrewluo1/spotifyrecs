@@ -123,7 +123,6 @@ const STATIC_GENRES = [
     "synth-pop",
     "tango",
     "techno",
-    "trance",
     "trip-hop",
     "work-out",
     "world-music"
@@ -176,7 +175,7 @@ export default function SwipeClient() {
         );
         const searchJson = await searchRes.json();
         recs = searchJson.tracks.items
-          .filter((t: any) => t.popularity <= 100)
+          .filter((t: any) => t.popularity >= 50)
           .sort(() => Math.random() - 0.5)
           .slice(0, 20);
       }
