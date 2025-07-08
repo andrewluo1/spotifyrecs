@@ -160,7 +160,7 @@ export default function SwipeClient() {
       const recsRes = await fetch(
         `https://api.spotify.com/v1/recommendations` +
           `?seed_genres=${encodeURIComponent(seed)}` +
-          `&limit=20&market=US&max_popularity=90`,
+          `&limit=20&market=US&max_popularity=100`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -176,7 +176,7 @@ export default function SwipeClient() {
         );
         const searchJson = await searchRes.json();
         recs = searchJson.tracks.items
-          .filter((t: any) => t.popularity <= 90)
+          .filter((t: any) => t.popularity <= 100)
           .sort(() => Math.random() - 0.5)
           .slice(0, 20);
       }
