@@ -113,7 +113,6 @@ const STATIC_GENRES = [
     "singer-songwriter",
     "ska",
     "sleep",
-    "songwriter",
     "soul",
     "soundtracks",
     "spanish",
@@ -175,7 +174,7 @@ export default function SwipeClient() {
         );
         const searchJson = await searchRes.json();
         recs = searchJson.tracks.items
-          .filter((t: any) => t.popularity >= 50)
+          .filter((t: any) => t.popularity >= 55)
           .sort(() => Math.random() - 0.5)
           .slice(0, 20);
       }
